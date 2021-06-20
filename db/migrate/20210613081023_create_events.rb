@@ -6,8 +6,8 @@ class CreateEvents < ActiveRecord::Migration[6.1]
       t.text :description
       t.datetime :date
       t.string :place
-      t.boolean :can_comment, default: true
-      t.boolean :is_quick_event, default: false
+      t.boolean :comment_enabled, default: true
+      t.boolean :quick_event, default: false
       t.integer :host_id
 
       t.timestamps
