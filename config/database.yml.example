@@ -17,6 +17,8 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  username: eventy
+  password: eventy123
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -81,6 +83,4 @@ test:
 #
 production:
   <<: *default
-  database: eventy
-  username: eventy
-  password: <%= ENV['EVENTY_DATABASE_PASSWORD'] %>
+  url: <%= ENV['MY_APP_DATABASE_URL'] %>
