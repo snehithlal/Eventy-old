@@ -31,11 +31,11 @@ module Api
       end
 
       def handle_unauthenticated
-        render json: { error: 'incorrect_username_or_password' }, status: :unauthorized
+        render json: { error: :incorrect_username_or_password }, status: :unauthorized
       end
 
       def handle_unauthorized
-        render json: { error: 'please_login_to_continue' }, status: :unauthorized
+        render json: { error: :please_login_to_continue }, status: :unauthorized
       end
 
       def handle_exception(error)
@@ -44,12 +44,12 @@ module Api
 
       # Status code 422
       def handle_missing_token
-        render json: { error: 'missing_token' }, status: :unprocessable_entity
+        render json: { error: :missing_token }, status: :unprocessable_entity
       end
 
       # Status code 422
       def handle_invalid_token
-        render json: { error: 'invalid_token' }, status: :unprocessable_entity
+        render json: { error: :invalid_token }, status: :unprocessable_entity
       end
     end
   end

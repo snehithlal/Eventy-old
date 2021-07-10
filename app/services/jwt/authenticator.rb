@@ -7,7 +7,7 @@ module Jwt
         token = authenticate_header(headers)
         raise Errors::Jwt::MissingToken unless token.present?
 
-        decoded_token = Decoder.decode!(token)
+        decoded_token = Decoder.decode_access_token!(token)
         user = authenticate_user_from_token(decoded_token)
         raise Errors::Unauthorized unless user.present?
 

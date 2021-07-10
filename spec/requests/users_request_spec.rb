@@ -13,7 +13,7 @@ RSpec.describe 'Users', type: :request do
         last_name: 'Doe'
       } }
       expect(response).to have_http_status(:created)
-      expect(json['user']).to eq({ 'id' => User.last.id, 'user_name' => 'user1' })
+      expect(auth_response_without_token).to eq({ 'id' => User.last.id, 'user_name' => 'user1' })
     end
   end
 end
