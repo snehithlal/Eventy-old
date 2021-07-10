@@ -9,6 +9,9 @@ module Api
       rescue_from ActionController::ParameterMissing, with: :parameter_missing
       rescue_from Errors::AuthenticateError, with: :handle_unauthenticated
       rescue_from Errors::Unauthorized, with: :handle_unauthorized
+      rescue_from Errors::Jwt::MissingToken, with: :handle_missing_token
+      rescue_from Errors::Jwt::InvalidToken, with: :handle_invalid_token
+
       # rescue_from Exception, with: :handle_exception
 
       private
@@ -28,15 +31,25 @@ module Api
       end
 
       def handle_unauthenticated
-        render json: { error: 'Incorrect username or password' }, status: :unauthorized
+        render json: { error: 'incorrect_username_or_password' }, status: :unauthorized
       end
 
       def handle_unauthorized
-        render json: { error: 'Please login to continue' }, status: :unauthorized
+        render json: { error: 'please_login_to_continue' }, status: :unauthorized
       end
 
       def handle_exception(error)
         render json: { error: error.message }, status: :internal_server_error
+      end
+
+      # Status code 422
+      def handle_missing_token
+        render json: { error: 'missing_token' }, status: :unprocessable_entity
+      end
+
+      # Status code 422
+      def handle_invalid_token
+        render json: { error: 'invalid_token' }, status: :unprocessable_entity
       end
     end
   end
