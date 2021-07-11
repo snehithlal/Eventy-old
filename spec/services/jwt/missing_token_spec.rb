@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Jwt::Authenticator, type: :class do
+RSpec.describe Jwt::Authenticator, type: :service do
   describe 'call' do
     let(:invalid_token_header) { invalid_token_header }
     
