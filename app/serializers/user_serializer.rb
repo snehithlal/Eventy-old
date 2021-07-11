@@ -8,7 +8,7 @@ class UserSerializer < Blueprinter::Base
   view :profile_details do
     fields :email, :full_name
   end
-  
+
   view :with_auth_token do
     field :auth_token do |user, _|
       Jwt::Issuer.call(user)

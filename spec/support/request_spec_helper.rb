@@ -15,8 +15,8 @@ module RequestSpecHelper
 
   def valid_headers(user)
     {
-      "Authorization" => token_generator(user),
-      "Content-Type" => "application/json"
+      'Authorization' => token_generator(user),
+      'Content-Type' => 'application/json'
     }
   end
 end

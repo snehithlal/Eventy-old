@@ -16,7 +16,7 @@ RSpec.describe User, type: :model do
 
   context 'given full name' do
     it 'should return alice bob charlie' do
-      expect(user.full_name).to eq('alice bob charlie') 
+      expect(user.full_name).to eq('alice bob charlie')
     end
   end
 end
