@@ -1,49 +1,27 @@
-name: CI
+name: RuboCop
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
+on: [push, pull_request]
 
 jobs:
-  main:
-    name: >-
-      ${{ matrix.os }} ${{ matrix.ruby }}
-    runs-on: ${{ matrix.os }}-latest
-    env:
-      # See https://github.com/tmm1/test-queue#environment-variables
-      TEST_QUEUE_WORKERS: 2
-    strategy:
-      fail-fast: false
-      matrix:
-        # [ ubuntu, macos, windows ]
-        os: [ windows ]
-        ruby: [ '2.5', '2.6', '2.7', '3.0', 'head' ]
-        include:
-          - { os: windows, ruby: mingw }
-        exclude:
-          - { os: windows, ruby: head  }
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: windows misc
-        if: matrix.os == 'windows'
-        run: |
-          # set TMPDIR, git core.autocrlf
-          echo "TMPDIR=$env:RUNNER_TEMP" >> $GITHUB_ENV
-          git config --system core.autocrlf false
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby }}
-
-      - name: install dependencies
-        run:  bundle install --jobs 3 --retry 3
-      - name: spec
-        run:  bundle exec rake spec
-      - name: ascii_spec
-        run:  bundle exec rake ascii_spec
-      - name: internal_investigation
-        run:  bundle exec rake internal_investigation
+    - uses: actions/checkout@v2
+    - name: Set up Ruby 3.0.0
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.0.0
+    - name: Cache gems
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-rubocop-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-rubocop-
+    - name: Install gems
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+    - name: Run RuboCop
+      run: bundle exec rubocop --parallel
