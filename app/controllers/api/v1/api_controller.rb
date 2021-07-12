@@ -12,32 +12,31 @@ module Api
       # rescue_from Exception, with: :handle_exception
 
       private
+        attr_reader :current_user
 
-      attr_reader :current_user
+        def authenticate
+          @current_user = Jwt::Authenticator.call(request.headers)
+        end
 
-      def authenticate
-        @current_user = Jwt::Authenticator.call(request.headers)
-      end
+        def record_not_found(error)
+          render json: { error: error.message }, status: :not_found
+        end
 
-      def record_not_found(error)
-        render json: { error: error.message }, status: :not_found
-      end
+        def parameter_missing(error)
+          render json: { error: error.message }, status: :unprocessable_entity
+        end
 
-      def parameter_missing(error)
-        render json: { error: error.message }, status: :unprocessable_entity
-      end
+        def handle_unauthenticated
+          render json: { error: 'Incorrect username or password' }, status: :unauthorized
+        end
 
-      def handle_unauthenticated
-        render json: { error: 'Incorrect username or password' }, status: :unauthorized
-      end
+        def handle_unauthorized
+          render json: { error: 'Please login to continue' }, status: :unauthorized
+        end
 
-      def handle_unauthorized
-        render json: { error: 'Please login to continue' }, status: :unauthorized
-      end
-
-      def handle_exception(error)
-        render json: { error: error.message }, status: :internal_server_error
-      end
+        def handle_exception(error)
+          render json: { error: error.message }, status: :internal_server_error
+        end
     end
   end
 end

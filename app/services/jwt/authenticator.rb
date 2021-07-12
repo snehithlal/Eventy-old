@@ -15,16 +15,15 @@ module Jwt
       end
 
       private
+        def authenticate_header(headers)
+          headers['Authorization']&.split('Bearer ')&.last
+        end
 
-      def authenticate_header(headers)
-        headers['Authorization']&.split('Bearer ')&.last
-      end
+        def authenticate_user_from_token(decoded_token)
+          raise Errors::Jwt::InvalidToken unless decoded_token[:jti].present? || decoded_token[:user_id].present?
 
-      def authenticate_user_from_token(decoded_token)
-        raise Errors::Jwt::InvalidToken unless decoded_token[:jti].present? || decoded_token[:user_id].present?
-
-        User.find(decoded_token.fetch(:user_id))
-      end
+          User.find(decoded_token.fetch(:user_id))
+        end
     end
   end
 end
