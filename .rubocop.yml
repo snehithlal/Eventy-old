@@ -17,6 +17,7 @@ AllCops:
     - 'actionmailbox/test/dummy/**/*'
     - 'actiontext/test/dummy/**/*'
     - '**/node_modules/**/*'
+    - 'bin/**/*'
 
 Performance:
   Exclude:
@@ -94,12 +95,6 @@ Layout/EmptyLinesAroundModuleBody:
 # Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
 Style/HashSyntax:
   Enabled: true
-
-# Method definitions after `private` or `protected` isolated calls need one
-# extra level of indentation.
-Layout/IndentationConsistency:
-  Enabled: true
-  EnforcedStyle: indented_internal_methods
 
 # Two spaces, no tabs (for indentation).
 Layout/IndentationWidth:
@@ -291,3 +286,14 @@ Performance/DeletePrefix:
 
 Performance/DeleteSuffix:
   Enabled: true
+
+Layout/EmptyLinesAroundAccessModifier: 
+  Description: "Keep blank lines around access modifiers." 
+  Enabled: true 
+  EnforcedStyle: around 
+  SupportedStyles: 
+    - around 
+    - only_before
+
+Layout/LineLength: 
+  Max:  120
