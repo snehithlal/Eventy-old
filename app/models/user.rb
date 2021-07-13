@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  has_many :user_events
+  has_many :events, through: :user_events
+
   validates :user_name, presence: true, uniqueness: true, length: { minimum: 3 }
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
