@@ -7,7 +7,7 @@ RSpec.describe 'Users', type: :request do
     context 'register a new user' do
       before do
         post '/api/v1/register', params: {
-          users: attributes_for(:user, user_name: 'user1')
+          user: attributes_for(:user, user_name: 'user1')
         }
       end
 

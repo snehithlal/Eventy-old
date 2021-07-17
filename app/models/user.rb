@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  has_many :events, foreign_key: 'host_id'
   has_many :user_events
-  has_many :events, through: :user_events
 
   validates :user_name, presence: true, uniqueness: true, length: { minimum: 3 }
   validates :email, presence: true, uniqueness: true

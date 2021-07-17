@@ -10,7 +10,7 @@ class CreateEvents < ActiveRecord::Migration[6.1]
       t.datetime :start_time
       t.datetime :end_time
       t.text :review
-      t.boolean :comment_enabled, default: true
+      t.boolean :chat_enabled, default: false
       t.boolean :quick_event, default: false
       t.boolean :completed, default: false
 
