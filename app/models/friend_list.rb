@@ -11,7 +11,7 @@ class FriendList < ApplicationRecord
   belongs_to :acceptor, class_name: 'User', foreign_key: 'acceptor_id'
 
   scope :accepted, -> { where(status: 1) }
-  
+
   def humanize_status
     STATUS[status]
   end

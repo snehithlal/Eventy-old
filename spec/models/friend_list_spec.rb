@@ -73,7 +73,7 @@ RSpec.describe FriendList, type: :model do
       expect(rejected_friend_list).to_not be_valid
     end
   end
-  
+
   # TCs for retrieving status name
   context 'Retrive humanized status' do
     let!(:friend1) { create(:user) }
@@ -91,18 +91,17 @@ RSpec.describe FriendList, type: :model do
     let!(:rejected_friend_list) {
       create(:friend_list, requester_id: friend5.id, acceptor_id: friend6.id, status: 2)
     }
-    
+
     it 'should return alice bob charlie' do
       expect(sent_friend_list.humanize_status).to eq('Sent')
     end
-    
+
     it 'should return alice bob charlie' do
       expect(accepted_friend_list.humanize_status).to eq('Accepted')
     end
-    
+
     it 'should return alice bob charlie' do
       expect(rejected_friend_list.humanize_status).to eq('Rejected')
     end
   end
-  
 end
