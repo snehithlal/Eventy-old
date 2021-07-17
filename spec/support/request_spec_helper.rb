@@ -13,9 +13,9 @@ module RequestSpecHelper
     Jwt::Issuer.call(user)
   end
 
-  def valid_headers(user)
+  def valid_headers(user = FactoryBot.create(:user))
     {
-      'Authorization' => token_generator(user),
+      'Authorization' => "Bearer #{token_generator(user)}",
       'Content-Type' => 'application/json'
     }
   end
