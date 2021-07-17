@@ -9,8 +9,15 @@ class User < ApplicationRecord
 
   has_secure_password
   has_one_attached :avatar
+  has_many :requested_friends, class_name: 'FriendList', foreign_key: :requester_id
+  has_many :accepted_friends, class_name: 'FriendList', foreign_key: :acceptor_id
 
   def full_name
     "#{first_name} #{middle_name} #{last_name}".squish
+  end
+
+  def friends_list
+    User.where(id: (requested_friends.accepted.pluck(:acceptor_id) + accepted_friends.accepted.pluck(:requester_id)))
+        .order('first_name, last_name')
   end
 end

@@ -13,10 +13,29 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:first_name) }
   it { should validate_presence_of(:last_name) }
   it { should validate_presence_of(:password) }
+  it { should have_many(:requested_friends) }
+  it { should have_many(:accepted_friends) }
 
   context 'given full name' do
     it 'should return alice bob charlie' do
       expect(user.full_name).to eq('alice bob charlie')
+    end
+  end
+
+  context 'retrieving friends list' do
+    let(:friend) { create(:user) }
+    let(:not_friend) { create(:user) }
+    let!(:accepted_friend) {
+      create(:friend_list, requester_id: user.id, acceptor_id: friend.id, status: 'Accepted')
+    }
+    let!(:sent_friend) {
+      create(:friend_list, requester_id: user.id, acceptor_id: not_friend.id, status: 'Sent')
+    }
+
+    it 'should only return friends with with accepted as status' do
+      friends_user_ids = user.friends_list.pluck(:id)
+      expect(friends_user_ids).to eq([friend.id])
+      expect(friends_user_ids).not_to include(not_friend.id)
     end
   end
 end
