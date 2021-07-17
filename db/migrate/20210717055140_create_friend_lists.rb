@@ -5,7 +5,7 @@ class CreateFriendLists < ActiveRecord::Migration[6.1]
     create_table :friend_lists do |t|
       t.integer :requester_id
       t.integer :acceptor_id
-      t.string :status, default: 'Sent'
+      t.integer :status, limit: 1, default: 0
       t.timestamps
     end
   end

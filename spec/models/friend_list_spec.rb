@@ -27,50 +27,82 @@ RSpec.describe FriendList, type: :model do
 
   # TCs for status changes
   context 'Test cases for status changes' do
+    let!(:friend1) { create(:user) }
+    let!(:friend2) { create(:user) }
     let!(:friend3) { create(:user) }
     let!(:friend4) { create(:user) }
     let!(:friend5) { create(:user) }
     let!(:friend6) { create(:user) }
-    let!(:friend7) { create(:user) }
-    let!(:friend8) { create(:user) }
     let!(:sent_friend_list) {
-      create(:friend_list, requester_id: friend3.id, acceptor_id: friend4.id)
+      create(:friend_list, requester_id: friend1.id, acceptor_id: friend2.id)
     }
     let!(:accepted_friend_list) {
-      create(:friend_list, requester_id: friend7.id, acceptor_id: friend8.id, status: 'Accepted')
+      create(:friend_list, requester_id: friend3.id, acceptor_id: friend4.id, status: 1)
     }
     let!(:rejected_friend_list) {
-      create(:friend_list, requester_id: friend5.id, acceptor_id: friend6.id, status: 'Rejected')
+      create(:friend_list, requester_id: friend5.id, acceptor_id: friend6.id, status: 2)
     }
 
     it 'Should be able to change status change from Sent to Accepted' do
-      sent_friend_list.status = 'Accepted'
+      sent_friend_list.status = 1
       expect(sent_friend_list).to be_valid
     end
 
     it 'Should be able to change status change from Sent to Rejected' do
-      sent_friend_list.status = 'Rejected'
+      sent_friend_list.status = 2
       expect(sent_friend_list).to be_valid
     end
 
     it 'Should not be able to change status change from Accepted to Rejected' do
-      accepted_friend_list.status = 'Rejected'
+      accepted_friend_list.status = 2
       expect(accepted_friend_list).to_not be_valid
     end
 
     it 'Should not be able to change status change from Accepted to Sent' do
-      accepted_friend_list.status = 'Sent'
+      accepted_friend_list.status = 0
       expect(accepted_friend_list).to_not be_valid
     end
 
     it 'Should not be able to change status change from Rejected to Sent' do
-      rejected_friend_list.status = 'Sent'
+      rejected_friend_list.status = 0
       expect(rejected_friend_list).to_not be_valid
     end
 
     it 'Should not be able to change status change from Rejected to Accepted' do
-      rejected_friend_list.status = 'Accepted'
+      rejected_friend_list.status = 1
       expect(rejected_friend_list).to_not be_valid
     end
   end
+  
+  # TCs for retrieving status name
+  context 'Retrive humanized status' do
+    let!(:friend1) { create(:user) }
+    let!(:friend2) { create(:user) }
+    let!(:friend3) { create(:user) }
+    let!(:friend4) { create(:user) }
+    let!(:friend5) { create(:user) }
+    let!(:friend6) { create(:user) }
+    let!(:sent_friend_list) {
+      create(:friend_list, requester_id: friend1.id, acceptor_id: friend2.id)
+    }
+    let!(:accepted_friend_list) {
+      create(:friend_list, requester_id: friend3.id, acceptor_id: friend4.id, status: 1)
+    }
+    let!(:rejected_friend_list) {
+      create(:friend_list, requester_id: friend5.id, acceptor_id: friend6.id, status: 2)
+    }
+    
+    it 'should return alice bob charlie' do
+      expect(sent_friend_list.humanize_status).to eq('Sent')
+    end
+    
+    it 'should return alice bob charlie' do
+      expect(accepted_friend_list.humanize_status).to eq('Accepted')
+    end
+    
+    it 'should return alice bob charlie' do
+      expect(rejected_friend_list.humanize_status).to eq('Rejected')
+    end
+  end
+  
 end

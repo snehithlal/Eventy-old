@@ -26,10 +26,10 @@ RSpec.describe User, type: :model do
     let(:friend) { create(:user) }
     let(:not_friend) { create(:user) }
     let!(:accepted_friend) {
-      create(:friend_list, requester_id: user.id, acceptor_id: friend.id, status: 'Accepted')
+      create(:friend_list, requester_id: user.id, acceptor_id: friend.id, status: 1)
     }
     let!(:sent_friend) {
-      create(:friend_list, requester_id: user.id, acceptor_id: not_friend.id, status: 'Sent')
+      create(:friend_list, requester_id: user.id, acceptor_id: not_friend.id, status: 0)
     }
 
     it 'should only return friends with with accepted as status' do
