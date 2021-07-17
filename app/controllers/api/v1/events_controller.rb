@@ -6,10 +6,10 @@ module Api
       def create
         event = Event.new(event_params)
         if event.save
-          render json: { event: EventSerializer.render_as_json(event, view: :with_all_associations) }, status: :created
+          render json: EventSerializer.render_as_json(event, root: :event, view: :with_all_associations),
+                        status: :created
         else
-          render json: { errors: event.errors.messages,
-            event: EventSerializer.render_as_json(event) }, status: :unprocessable_entity
+          render json: { errors: event.errors.messages }, status: :unprocessable_entity
         end
       end
 
