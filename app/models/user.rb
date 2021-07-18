@@ -3,6 +3,7 @@
 class User < ApplicationRecord
   has_many :events, foreign_key: 'host_id'
   has_many :user_events
+  has_many :groups, dependent: :destroy
 
   validates :user_name, presence: true, uniqueness: true, length: { minimum: 3 }
   validates :email, presence: true, uniqueness: true
