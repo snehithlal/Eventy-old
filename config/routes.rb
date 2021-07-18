@@ -6,7 +6,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :friend_lists, only: [:index, :create, :destroy] do
         collection do
-          post :search
+          get :accept
+          get :search
         end
       end
 

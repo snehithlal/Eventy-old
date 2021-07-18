@@ -15,8 +15,14 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:password) }
   it { should have_many(:events).with_foreign_key('host_id') }
   it { should have_many(:user_events) }
-  it { should have_many(:requested_friends) }
-  it { should have_many(:accepted_friends) }
+  it { should have_many(:requested_friends).
+    class_name('FriendList').
+    with_foreign_key(:requester_id)
+  }
+  it { should have_many(:accepted_friends).
+    class_name('FriendList').
+    with_foreign_key(:acceptor_id)
+  }
 
   context 'given full name' do
     it 'should return alice bob charlie' do
@@ -24,20 +30,72 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context 'retrieving friends list' do
-    let(:friend) { create(:user) }
-    let(:not_friend) { create(:user) }
-    let!(:accepted_friend) {
-      create(:friend_list, requester_id: user.id, acceptor_id: friend.id, status: 1)
-    }
-    let!(:sent_friend) {
-      create(:friend_list, requester_id: user.id, acceptor_id: not_friend.id, status: 0)
-    }
+  describe 'retrieving friends list (friends_list method)' do
+    let!(:friend1) { create(:user) }
+    let!(:friend2) { create(:user) }
+    let(:friends) { user.friends_list.pluck(:id) }
 
-    it 'should only return friends with with accepted as status' do
-      friends_user_ids = user.friends_list.pluck(:id)
-      expect(friends_user_ids).to eq([friend.id])
-      expect(friends_user_ids).not_to include(not_friend.id)
+    context 'no friends connected yet' do
+      it 'should get not friends user record' do
+        expect(friends).to be_empty
+      end
+    end
+
+    context 'friend request sent but no friends connected yet' do
+      let!(:friend_list1) { create(:friend_list, requester_id: user.id, acceptor_id: friend1.id) }
+      let!(:friend_list2) { create(:friend_list, requester_id: friend2.id, acceptor_id: user.id) }
+
+      it 'should get not friends user record' do
+        expect(friends).to be_empty
+      end
+    end
+
+    context 'connected friends exists' do
+      let!(:friend_list1) {
+        ft = create(:friend_list, requester_id: user.id, acceptor_id: friend1.id)
+        ft.update_attribute(:status, 1)
+        ft
+      }
+      let!(:friend_list2) {
+        ft = create(:friend_list, requester_id: friend2.id, acceptor_id: user.id)
+        ft.update_attribute(:status, 1)
+        ft
+      }
+
+      it 'should get all connected friends user record' do
+        expect(friends).to match_array([friend1.id, friend2.id])
+        expect(friends).not_to be_empty
+      end
+    end
+
+    context 'two friend request by user but only one accepted connected friends exists' do
+      let!(:friend_list1) { create(:friend_list, requester_id: user.id, acceptor_id: friend1.id) }
+      let!(:friend_list2) {
+        ft = create(:friend_list, requester_id: user.id, acceptor_id: friend2.id)
+        ft.update_attribute(:status, 1)
+        ft
+      }
+
+      it 'should get only accepted friends user record' do
+        expect(friends).to match_array([friend2.id])
+        expect(friends).not_to be_empty
+        expect(friends).not_to match_array([friend1.id])
+      end
+    end
+
+    context 'two friend request by friend but only one accepted connected friends exists' do
+      let!(:friend_list1) { create(:friend_list, requester_id: friend1.id, acceptor_id: user.id, status: 0) }
+      let!(:friend_list2) {
+        ft = create(:friend_list, requester_id: friend2.id, acceptor_id: user.id)
+        ft.update_attribute(:status, 1)
+        ft
+      }
+
+      it 'should get only accepted friends user record' do
+        expect(friends).to match_array([friend2.id])
+        expect(friends).not_to be_empty
+        expect(friends).not_to match_array([friend1.id])
+      end
     end
   end
 end

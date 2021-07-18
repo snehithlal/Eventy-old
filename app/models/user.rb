@@ -19,8 +19,26 @@ class User < ApplicationRecord
     "#{first_name} #{middle_name} #{last_name}".squish
   end
 
+  # Returns connected friends
   def friends_list
-    User.where(id: (requested_friends.accepted.pluck(:acceptor_id) + accepted_friends.accepted.pluck(:requester_id)))
+    User.where(id: connected_friend_ids)
         .order('first_name, last_name')
+  end
+
+  private
+
+  # Return user ids of all connected friends by senting request
+  def requested_friends_ids
+    requested_friends.accepted.pluck(:acceptor_id)
+  end
+
+  # Return user ids of all connected friends by accepting request
+  def accepted_friends_ids
+    accepted_friends.accepted.pluck(:requester_id)
+  end
+
+  # Return user ids of all connected friends
+  def connected_friend_ids
+    requested_friends_ids + accepted_friends_ids
   end
 end
