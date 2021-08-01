@@ -4,5 +4,5 @@ class UserEvent < ApplicationRecord
   belongs_to :event
   belongs_to :user
 
-  validates :user_id, presence: true
+  validates :user_id, presence: true, uniqueness: { scope: :event_id }
 end
