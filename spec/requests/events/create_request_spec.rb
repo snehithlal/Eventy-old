@@ -17,16 +17,6 @@ RSpec.describe 'Events Create', type: :request do
                                )
         }
       end
-      let(:valid_params_with_co_hosts) do
-        {
-          event: attributes_for(:event,
-                                host_id: user.id,
-                                user_events_attributes: makes_user_event_id_hash(2),
-                                co_hosts_attributes: makes_user_event_id_hash(2)
-                               )
-        }
-      end
-
       context 'with event params only' do
         before do
           post '/api/v1/events', params: valid_params.to_json, headers: valid_headers
@@ -55,24 +45,6 @@ RSpec.describe 'Events Create', type: :request do
 
         it 'should create 2 user_events' do
           expect(json['event']['user_events'].length).to eql 2
-        end
-      end
-
-      context 'should create event with  co hosts' do
-        before do
-          post '/api/v1/events', params: valid_params_with_co_hosts.to_json, headers: valid_headers
-        end
-
-        it 'should return status code' do
-          expect(response).to have_http_status(:created)
-        end
-
-        it 'should return co_hosts response' do
-          expect(json['event']['co_hosts']).to be_present
-        end
-
-        it 'should create 2 co_hosts' do
-          expect(json['event']['co_hosts'].length).to eql 2
         end
       end
     end

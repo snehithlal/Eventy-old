@@ -4,7 +4,7 @@ require 'rails_helper'
 include EventSpecHelper
 
 RSpec.describe 'Event show', type: :request do
-  let!(:events) { create_list(:event_with_recipients_and_co_hosts, 2) }
+  let!(:events) { create_list(:event_with_recipients, 2) }
   let(:event_id) { events.first.id }
   describe 'get events/:id' do
     before do

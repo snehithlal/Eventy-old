@@ -15,11 +15,8 @@ class EventSerializer < Blueprinter::Base
     association :user_events, blueprint: UserEventSerializer
   end
 
-  view :with_co_hosts do
-    association :co_hosts, blueprint: CoHostSerializer
-  end
 
   view :with_all_associations do
-    include_views :with_co_hosts, :with_user_events
+    include_views :with_user_events
   end
 end
