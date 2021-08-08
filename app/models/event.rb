@@ -15,9 +15,15 @@ class Event < ApplicationRecord
 
   accepts_nested_attributes_for :user_events, allow_destroy: true
 
+  before_create :add_host_to_the_user_events
+
   private
 
   def validate_end_time_after_start_time
     errors.add(:end_time, 'cant be before start time') if end_time <= start_time
+  end
+
+  def add_host_to_the_user_events
+    user_events.build(user_id: host_id, event_role: 'admin')
   end
 end

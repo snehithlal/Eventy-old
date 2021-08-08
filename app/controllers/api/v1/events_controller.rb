@@ -39,7 +39,7 @@ module Api
 
       def event_params
         params.require(:event).permit(:title, :description, :start_time, :end_time, :host_id,
-          user_events_attributes: [:id, :_destroy, :user_id])
+          user_events_attributes: [:id, :_destroy, :user_id, :event_role])
       end
 
       def fetch_event

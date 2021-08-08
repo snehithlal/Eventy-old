@@ -6,6 +6,7 @@ include EventSpecHelper
 RSpec.describe 'Event Edit', type: :request do
   let!(:events) { create_list(:event_with_recipients, 2) }
   let(:event_id) { events.first.id }
+
   describe 'get /:id/edit' do
     before do
       get "/api/v1/events/#{event_id}/edit", headers: valid_headers

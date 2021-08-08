@@ -15,6 +15,8 @@ class CreateEvents < ActiveRecord::Migration[6.1]
       t.boolean :completed, default: false
 
       t.timestamps
+      t.index [:start_time, :end_time]
+      t.index [:host_id]
     end
   end
 end

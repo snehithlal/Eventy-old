@@ -3,6 +3,6 @@
 class UserEventSerializer < Blueprinter::Base
   identifier :id
 
-  fields :priority, :reminder_time, :reminder_enabled
+  fields :priority, :reminder_time, :reminder_enabled, :event_role
   association :user, blueprint: UserSerializer
 end
