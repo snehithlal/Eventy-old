@@ -30,7 +30,7 @@ module Api
           render json: EventSerializer.render_as_json(@event, root: :event, view: :with_all_associations),
           status: :ok
         else
-          render json: { errors: @event.errors.full_messages },
+          render json: { errors: @event.errors.messages },
           status: :unprocessable_entity
         end
       end
