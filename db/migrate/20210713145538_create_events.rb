@@ -3,7 +3,7 @@
 class CreateEvents < ActiveRecord::Migration[6.1]
   def change
     create_table :events do |t|
-      t.integer :host_id
+      t.integer :host_id, index: true
       t.string :title
       t.text :description
       t.string :place
@@ -15,6 +15,7 @@ class CreateEvents < ActiveRecord::Migration[6.1]
       t.boolean :completed, default: false
 
       t.timestamps
+      t.index [:start_time, :end_time]
     end
   end
 end

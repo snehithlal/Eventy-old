@@ -7,7 +7,11 @@ Rails.application.routes.draw do
       post 'login', to: 'authentication#create'
       post 'register', to: 'users#create'
 
-      resources :events
+      resources :events do
+        member do
+          get :edit
+        end
+      end
     end
   end
 end
