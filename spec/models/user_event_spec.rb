@@ -36,4 +36,15 @@ RSpec.describe UserEvent, type: :model do
       expect(admin_event.participant?).to be_falsey
     end
   end
+
+  context 'a context' do
+    let(:user) { create(:user, user_name: 'duplicate') }
+    let(:duplicate_test) { makes_user_event_id_hash(2) << { user_id: user.id, event_role: 'admin' } }
+    let(:event_atttributes) { attributes_for(:event).merge(host_id: user.id, user_events_attributes: duplicate_test) }
+    it 'should not store duplicates' do
+      events = Event.new(event_atttributes)
+      events.save
+      expect(events.user_events.admins.count).to eql 1
+    end
+  end
 end

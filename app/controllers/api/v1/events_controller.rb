@@ -9,7 +9,7 @@ module Api
         event = Event.new(event_params)
         if event.save
           render json: EventSerializer.render_as_json(event, root: :event, view: :with_all_associations),
-                        status: :created
+                 status: :created
         else
           render json: { errors: event.errors.messages }, status: :unprocessable_entity
         end
@@ -17,21 +17,21 @@ module Api
 
       def edit
         render json: EventSerializer.render_as_json(@event, root: :event, view: :with_all_associations),
-        status: :ok
+               status: :ok
       end
 
       def show
         render json: EventSerializer.render_as_json(@event, root: :event, view: :with_all_associations),
-          status: :ok
+               status: :ok
       end
 
       def update
         if @event.update(event_params)
           render json: EventSerializer.render_as_json(@event, root: :event, view: :with_all_associations),
-          status: :ok
+                 status: :ok
         else
           render json: { errors: @event.errors.messages },
-          status: :unprocessable_entity
+                 status: :unprocessable_entity
         end
       end
 

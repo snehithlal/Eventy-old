@@ -6,6 +6,8 @@ class Event < ApplicationRecord
   has_many :user_events, dependent: :destroy
   has_many :recipients, through: :user_events, source: :user
 
+  before_create :add_host_to_the_user_events
+
   validate :validate_end_time_after_start_time, if: proc { |event| event.end_time.present? }
 
   validates :title, presence: true
@@ -13,9 +15,8 @@ class Event < ApplicationRecord
   validates :host_id, presence: true
   validates :start_time, presence: true
 
+  # FIXME: check uniqueness with scope in nested params
   accepts_nested_attributes_for :user_events, allow_destroy: true
-
-  before_create :add_host_to_the_user_events
 
   private
 

@@ -11,6 +11,7 @@ RSpec.describe 'Events Create', type: :request do
     context 'when request is valid' do
       let(:valid_params) { { event: attributes_for(:event, title: 'new_event', host_id: user.id) } }
       let(:user_event_details) { makes_user_event_id_hash(2) << { user_id: co_host.id, event_role: 'co_host' } }
+
       let(:valid_params_with_users) do
         {
           event: attributes_for(:event,
