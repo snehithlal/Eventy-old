@@ -11,11 +11,4 @@ class UserEvent < ApplicationRecord
   scope :admins, -> { where(event_role: 'admin') }
   scope :participants, -> { where(event_role: 'participant') }
   scope :co_hosts, -> { where(event_role: 'co_host') }
-
-  # call using participant? or admin?
-  %w(participant admin co_host).each do |method_name|
-    define_method "#{method_name}?" do
-      event_role == method_name
-    end
-  end
 end
