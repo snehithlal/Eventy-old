@@ -16,10 +16,14 @@ module Api
 
       private
 
-      attr_reader :current_user
-
       def authenticate
-        @current_user = Jwt::Authenticator.call(request.headers)
+        user = Jwt::Authenticator.call(request.headers)
+
+        set_current_attributes(user)
+      end
+
+      def set_current_attributes(user)
+        Current.user = user
       end
 
       def record_not_found(error)

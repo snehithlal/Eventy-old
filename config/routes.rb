@@ -12,6 +12,8 @@ Rails.application.routes.draw do
           get :edit
         end
       end
+
+      resources :circles
     end
   end
 end
