@@ -18,6 +18,10 @@ class Event < ApplicationRecord
   # FIXME: check uniqueness with scope in nested params
   accepts_nested_attributes_for :user_events, allow_destroy: true
 
+  scope :for_user, lambda { |user_id| joins(:user_events).where(user_events: { user_id: user_id }) }
+  scope :active, -> { where('start_time >= ?', Date.today) }
+  scope :order_by_priority, -> { joins(:user_events).order('priority asc, start_time asc') }
+
   private
 
   def validate_end_time_after_start_time

@@ -5,5 +5,6 @@ FactoryBot.define do
     association :event, factory: :event
     association :user, factory: :user
     reminder_time { Faker::Date.forward(days: 10) }
+    priority { Faker::Number.within(range: 1..100) }
   end
 end

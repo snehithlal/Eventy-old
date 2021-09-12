@@ -4,9 +4,9 @@ FactoryBot.define do
   factory :event do
     association :host, factory: :user
     title { Faker::Restaurant.name }
-    description {  Faker::Restaurant.description }
+    description { Faker::Restaurant.description }
     place { Faker::Address.street_name  }
-    start_time { Faker::Date.forward(days: 10) }
+    start_time { Faker::Date.forward(days: Faker::Number.within(range: 1..10)) }
 
     factory :event_with_recipients do
       transient do

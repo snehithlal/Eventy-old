@@ -5,6 +5,12 @@ module Api
     class EventsController < ApiController
       before_action :fetch_event, only: [:edit, :show, :update]
 
+      def index
+        events = EventQuery.call(params, current_user)
+        render json: EventSerializer.render_as_json(events, root: :event, view: :with_all_associations),
+               status: :ok
+      end
+
       def create
         event = Event.new(event_params)
         if event.save
