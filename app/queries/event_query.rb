@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class EventQuery < BaseService
-  def initialize(params, user)
-    @params = params
+  def initialize(user, params)
     @user = user
+    @params = params
   end
 
   def call
@@ -18,11 +18,10 @@ class EventQuery < BaseService
   attr_accessor :events
 
   def all_events
-    @events = Event.for_user(user)
+    @events = Event.order_by_user_priority(user)
   end
 
   def filter_events
     @events = events.active
-    @events = events.order_by_priority
   end
 end

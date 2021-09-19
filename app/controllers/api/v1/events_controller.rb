@@ -6,9 +6,7 @@ module Api
       before_action :fetch_event, only: [:edit, :show, :update]
 
       def index
-        events = EventQuery.call(params, current_user)
-        render json: EventSerializer.render_as_json(events, root: :event, view: :with_all_associations),
-               status: :ok
+        render_all_events(params)
       end
 
       def create
@@ -41,6 +39,18 @@ module Api
         end
       end
 
+      def toggle_pin
+        user_event = UserEvent.find_by(id: params[:id])
+        if user_event.present?
+          user_event.toggle_priority
+          parameters = { id: user_event.id }
+          render_all_events(parameters)
+        else
+          render json: { errors: :user_event_not_found },
+                 status: :not_found
+        end
+      end
+
       private
 
       def event_params
@@ -50,6 +60,12 @@ module Api
 
       def fetch_event
         @event = Event.find(params[:id])
+      end
+
+      def render_all_events(parameters)
+        events = EventQuery.call(current_user, parameters)
+        render json: EventSerializer.render_as_json(events, root: :event, view: :with_all_associations),
+               status: :ok
       end
     end
   end
