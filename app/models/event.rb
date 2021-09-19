@@ -21,7 +21,7 @@ class Event < ApplicationRecord
   scope :for_user, lambda { |user_id| joins(:user_events).where(user_events: { user_id: user_id }) }
   scope :active, -> { where('start_time >= ?', Date.today) }
   scope :order_by_user_priority, ->(user_id) { joins(:user_events)
-                                        .where(user_events: {user_id: user_id})
+                                        .where(user_events: { user_id: user_id })
                                         .order('priority ASC NULLS LAST, start_time ASC') }
 
   private
