@@ -13,8 +13,4 @@ module EventSpecHelper
     response_hash.dig('event', 'user_events').select { |user_event|
       user_event['event_role'] == role }
   end
-
-  def add_partcipants(event, users)
-    event.user_evet
-  end
 end
