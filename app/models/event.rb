@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Event < ApplicationRecord
+class Event < CircleScopedRecord
   belongs_to :host, class_name: 'User', foreign_key: 'host_id'
 
   has_many :user_events, dependent: :destroy
@@ -26,5 +26,9 @@ class Event < ApplicationRecord
 
   def add_host_to_the_user_events
     user_events.build(user_id: host_id, event_role: 'admin')
+  end
+
+  def set_circle
+    self.circle_id = Current.circle&.id
   end
 end

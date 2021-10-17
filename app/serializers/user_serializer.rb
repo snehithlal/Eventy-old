@@ -14,4 +14,10 @@ class UserSerializer < Blueprinter::Base
       Jwt::Issuer.call(user)
     end
   end
+
+  view :with_circles do
+    field :joined_circles do |user, _|
+      CircleSerializer.render_as_json(user.joined_circles, root: :circles, view: :with_head_and_members)
+    end
+  end
 end

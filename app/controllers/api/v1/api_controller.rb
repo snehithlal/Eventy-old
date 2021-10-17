@@ -24,6 +24,8 @@ module Api
 
       def set_current_attributes(user)
         Current.user = user
+        # FIXME: check for better approach to handle multi tenancy
+        Current.circle = Circle.for_user(user.id).where(id: request.headers['CircleId']).first
       end
 
       def record_not_found(error)

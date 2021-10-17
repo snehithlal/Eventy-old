@@ -17,4 +17,8 @@ class User < ApplicationRecord
   def full_name
     "#{first_name} #{middle_name} #{last_name}".squish
   end
+
+  def joined_circles
+    Circle.for_user(id)
+  end
 end

@@ -6,9 +6,10 @@ class CreateCircles < ActiveRecord::Migration[6.1]
       t.string :name
       t.text :description
       t.references :head, null: false, foreign_key: { to_table: :users }
-      t.text :members
-
+      t.text :member_ids, array: true, default: []
       t.timestamps
     end
+
+    add_index :circles, :member_ids, using: 'gin'
   end
 end
