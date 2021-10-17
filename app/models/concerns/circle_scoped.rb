@@ -28,7 +28,7 @@ module CircleScoped
       options = attributes.extract_options!.symbolize_keys
       if options[:uniqueness].present?
         if options[:uniqueness].is_a?(Hash)
-          options.[:uniqueness][:scope] = Array.wrap(options[:uniqueness].delete(:scope)) | [:circle_id]
+          options[:uniqueness][:scope] = Array.wrap(options[:uniqueness].delete(:scope)) | [:circle_id]
         else
           options[:uniqueness] = { scope: :circle_id }
         end
