@@ -3,7 +3,7 @@
 class CircleScopedRecord < ApplicationRecord
   self.abstract_class = true
 
-  if Current.circle.present?
+  if Current.circle && Current.circle.is_a?(Circle)
     method(:include).call(CircleScoped)
   end
 end

@@ -27,8 +27,4 @@ class Event < CircleScopedRecord
   def add_host_to_the_user_events
     user_events.build(user_id: host_id, event_role: 'admin')
   end
-
-  def set_circle
-    self.circle_id = Current.circle&.id
-  end
 end
