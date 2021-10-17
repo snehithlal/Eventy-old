@@ -18,7 +18,7 @@ module CircleScoped
     def validates_uniqueness_of(*attributes)
       options = attr_names.extract_options!.symbolize_keys
       options[:scope] = Array.wrap(options.delete(:scope)) | [:circle_id]
-      
+
       attributes << options
       super
     end
@@ -33,7 +33,7 @@ module CircleScoped
           options[:uniqueness] = { scope: :circle_id }
         end
       end
-      
+
       attributes << options
       super
     end
