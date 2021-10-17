@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCircleToEvents < ActiveRecord::Migration[6.1]
   def change
     add_column :events, :circle_id, :integer

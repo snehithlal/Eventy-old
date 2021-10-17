@@ -4,7 +4,7 @@ class CircleSerializer < Blueprinter::Base
   identifier :id
 
   fields :name, :description
-  
+
   view :with_head do
     association :head, blueprint: UserSerializer, view: :profile_details
   end
