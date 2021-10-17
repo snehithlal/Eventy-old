@@ -17,20 +17,18 @@ module CircleScoped
     # overriding since default_scope wont work with uniqueness validation
     def validates_uniqueness_of(*attributes)
       options = attr_names.extract_options!.symbolize_keys
-      existing_scope = Array.wrap(options.delete(:scope))
-      scope = existing_scope | [:circle_id]
-
-      super(*attributes, options.merge(scope: scope))
+      options[:scope] = Array.wrap(options.delete(:scope)) | [:circle_id]
+      
+      attributes << options
+      super
     end
 
     # overriding since default_scope wont work with uniqueness validation
     def validates(*attributes)
-      options = attributes.extract_options!
+      options = attributes.extract_options!.symbolize_keys
       if options[:uniqueness].present?
-        if options[:uniqueness].class == Hash
-          options[:uniqueness][:scope].present? ?
-            (options[:uniqueness][:scope] = Array(options[:uniqueness][:scope]) << :circle_id) :
-            options[:uniqueness].merge!(scope: :circle_id)
+        if options[:uniqueness].is_a?(Hash)
+          options.[:uniqueness][:scope] = Array.wrap(options[:uniqueness].delete(:scope)) | [:circle_id]
         else
           options[:uniqueness] = { scope: :circle_id }
         end
