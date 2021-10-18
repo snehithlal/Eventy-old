@@ -40,7 +40,7 @@ module Api
       end
 
       def toggle_pin
-        user_event = UserEvent.find_by(id: params[:id])
+        user_event = UserEvent.find(params[:id])
         if user_event.present?
           user_event.toggle_priority
           parameters = { id: user_event.id }
