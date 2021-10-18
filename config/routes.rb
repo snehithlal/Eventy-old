@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :events do
         member do
           get :edit
+          get :toggle_pin
         end
       end
     end

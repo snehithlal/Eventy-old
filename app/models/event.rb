@@ -3,7 +3,7 @@
 class Event < ApplicationRecord
   belongs_to :host, class_name: 'User', foreign_key: 'host_id'
 
-  has_many :user_events, dependent: :destroy
+  has_many :user_events, dependent: :delete_all
   has_many :recipients, through: :user_events, source: :user
 
   before_create :add_host_to_the_user_events
@@ -17,6 +17,12 @@ class Event < ApplicationRecord
 
   # FIXME: check uniqueness with scope in nested params
   accepts_nested_attributes_for :user_events, allow_destroy: true
+
+  scope :for_user, lambda { |user_id| joins(:user_events).where(user_events: { user_id: user_id }) }
+  scope :active, -> { where('start_time >= ?', Date.today) }
+  scope :order_by_user_priority, ->(user_id) { joins(:user_events)
+                                        .where(user_events: { user_id: user_id })
+                                        .order('priority ASC NULLS LAST, start_time ASC') }
 
   private
 
