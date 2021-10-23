@@ -3,7 +3,7 @@ env:
   TEST_DB: eventy_test
   TEST_USER: postgres
   TEST_PASSWORD: postgres
-  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+  TEST_JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
 name: Rails Specs
 on: [push, pull_request]
