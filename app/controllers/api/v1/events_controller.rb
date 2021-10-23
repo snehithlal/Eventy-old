@@ -63,7 +63,7 @@ module Api
       end
 
       def render_all_events(parameters)
-        events = EventQuery.call(current_user, parameters)
+        events = EventQuery.call(parameters)
         render json: EventSerializer.render_as_json(events, root: :event, view: :with_all_associations),
                status: :ok
       end

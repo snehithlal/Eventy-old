@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EventQuery < BaseService
-  def initialize(user, params)
+  def initialize(params, user = Current.user)
     @user = user
     @params = params
   end
