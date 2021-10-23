@@ -19,10 +19,10 @@ jobs:
           POSTGRES_USER: ${{ env.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-ruby@v1
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
       - name: Install postgres client
         run: sudo apt-get install libpq-dev
       - name: Install dependencies
@@ -34,7 +34,7 @@ jobs:
           bundler exec rails db:create RAILS_ENV=test
           bundler exec rails db:migrate RAILS_ENV=test
       - name: Run tests
-        run: bundler exec rspec spec/*
+        run: bundler exec rspec
       - name: Upload coverage results
         uses: actions/upload-artifact@master
         if: always()
