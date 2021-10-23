@@ -16,10 +16,16 @@ module Api
 
       private
 
-      attr_reader :current_user
-
       def authenticate
-        @current_user = Jwt::Authenticator.call(request.headers)
+        user = Jwt::Authenticator.call(request.headers)
+
+        set_current_attributes(user)
+      end
+
+      def set_current_attributes(user)
+        Current.user = user
+        # FIXME: check for better approach to handle multi tenancy
+        Current.circle = Circle.for_user(user.id).where(id: request.headers['CircleId']).first
       end
 
       def record_not_found(error)

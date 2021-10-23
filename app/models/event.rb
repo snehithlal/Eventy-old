@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Event < ApplicationRecord
+class Event < CircleScopedRecord
   belongs_to :host, class_name: 'User', foreign_key: 'host_id'
 
   has_many :user_events, dependent: :delete_all

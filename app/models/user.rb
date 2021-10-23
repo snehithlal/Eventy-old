@@ -3,6 +3,7 @@
 class User < ApplicationRecord
   has_many :events, foreign_key: 'host_id'
   has_many :user_events
+  has_many :circles, foreign_key: 'head_id'
 
   validates :user_name, presence: true, uniqueness: true, length: { minimum: 3 }
   validates :email, presence: true, uniqueness: true
@@ -15,5 +16,9 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name} #{middle_name} #{last_name}".squish
+  end
+
+  def joined_circles
+    Circle.for_user(id)
   end
 end

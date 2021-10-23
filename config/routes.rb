@@ -13,6 +13,8 @@ Rails.application.routes.draw do
           get :toggle_pin
         end
       end
+
+      resources :circles
     end
   end
 end
