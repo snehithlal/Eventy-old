@@ -1,8 +1,9 @@
 env:
   RUBY_VERSION: 3.0.0
-  POSTGRES_DB: eventy_test
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
+  TEST_DB: eventy_test
+  TEST_USER: postgres
+  TEST_PASSWORD: postgres
+  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
 name: Rails Specs
 on: [push, pull_request]
