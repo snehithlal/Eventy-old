@@ -61,4 +61,4 @@ Rails.application.configure do
   # config.action_view.annotate_rendered_view_with_filenames = true
 end
 
-Rails.application.credentials = { jwt: { access_token_secret: ENV['TEST_JWT_SECRET_KEY'] } }
+# Rails.application.credentials = { jwt: { access_token_secret: ENV['TEST_JWT_SECRET_KEY'] } }
