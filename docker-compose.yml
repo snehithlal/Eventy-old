@@ -1,0 +1,63 @@
+version: '3.4'
+
+services:
+  database:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - database_data:/var/lib/postgresql/data
+      - shared_data:/var/shared
+    environment:
+      POSTGRES_USER: eventy
+      POSTGRES_PASSWORD: eventy123
+
+  eventy_app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - database
+    volumes:
+      - .:/app
+      - shared_data:/var/shared
+      - gem_cache:/usr/local/bundle/gems
+    stdin_open: true
+    tty: true
+    entrypoint: dev-entrypoint.sh
+    command: ['rails', 's', '-p',  '3000', '-b', '0.0.0.0']
+    # env_file: .env
+    environment:
+      RAILS_ENV: development
+      POSTGRES_USER: eventy
+      POSTGRES_PASSWORD: eventy123
+      POSTGRES_HOST: database
+
+  eventy_test:
+    image: eventy_eventy_app
+    ports:
+      - 3001:3000
+    depends_on:
+      - database
+    volumes:
+      - .:/app
+      - shared_data:/var/shared
+      - gem_cache:/usr/local/bundle/gems
+    stdin_open: true
+    tty: true
+    entrypoint: test-entrypoint.sh
+    command: ['rspec']
+    env_file: .env
+    environment:
+      RAILS_ENV: test
+      POSTGRES_USER: eventy
+      POSTGRES_PASSWORD: eventy123
+      POSTGRES_HOST: database
+      TEST_JWT_SECRET_KEY: abc
+
+volumes:
+  database_data:
+  gem_cache:
+  shared_data:
