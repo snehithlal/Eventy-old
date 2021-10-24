@@ -21,6 +21,9 @@ require 'rails/test_unit/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Load from Environment variable from .env file
+Dotenv::Railtie.load
+
 module Eventy
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

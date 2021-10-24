@@ -1,0 +1,44 @@
+env:
+  RUBY_VERSION: 3.0.0
+  TEST_DB: eventy_test
+  TEST_USER: postgres
+  TEST_PASSWORD: postgres
+  TEST_JWT_SECRET_KEY: abcdefghi1244asdasakfmk # ${{ secrets.JWT_SECRET_KEY }}
+
+name: Rails Specs
+on: [push, pull_request]
+jobs:
+  rspec-test:
+    name: RSpec
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+        - 5432:5432
+        env:
+          POSTGRES_USER: ${{ env.TEST_USER }}
+          POSTGRES_PASSWORD: ${{ env.TEST_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Install postgres client
+        run: sudo apt-get install libpq-dev
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundler install
+      - name: Create database
+        run: |
+          bundler exec rails db:create RAILS_ENV=test
+          bundler exec rails db:migrate RAILS_ENV=test
+      - name: Run tests
+        run: bundler exec rspec
+      - name: Upload coverage results
+        uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage
